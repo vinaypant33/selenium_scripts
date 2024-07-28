@@ -7,19 +7,18 @@ import threading
 
 
 
-from scrapper import Scrapper_selenium
+from scrapper import Selenium_scrapper
 
 
 
 
 
 def single_threaded_ui():
-        
-
     main_application  = tk.Tk()
     main_application.title("Amazon Order Scrapper")
     app_width  = 400 
     app_height  = 200
+    
 
 
     x_location  = ( main_application.winfo_screenwidth() //2 ) - ( app_width //2 )
@@ -27,25 +26,18 @@ def single_threaded_ui():
     main_application.geometry(f'{app_width}x{app_height}+{x_location}+{y_location}')
     main_application.resizable( 0 , 0 )
 
-
-
     # Defining Contants : 
     yearly_selectionvar  = tk.BooleanVar()
     username_passwordvar  = tk.BooleanVar()
     is_working  = False
 
-
-
-
     def start_data_scrapping():
-        webdriver  = Scrapper_selenium()
-        webdriver.visit_website()
+        webdriver  = Selenium_scrapper(username='vinaypant24@gmail.com' , password='Stillconquering@2290')
+        
         
 
     def stop_data_scrapping():
         print("Data Scrapping Stopped")
-
-
 
 
     # Funcations that are to be added in the main application : 
@@ -57,11 +49,14 @@ def single_threaded_ui():
             global username_textbox
             global password_textbox
             username_textbox  = ttk.Entry(main_application , width=40 )
-            password_textbox  = ttk.Entry(main_application  , width=40)
+            password_textbox  = ttk.Entry(main_application  , width=40 , show="*")
             
             
-            username_textbox.insert(0 , "Enter Username")
-            password_textbox.insert( 0 , "Enter Password")
+            # username_textbox.insert(0 , "Enter Username")
+            # password_textbox.insert( 0 , "Enter Password")
+            
+            username_textbox.insert(0 , 'vinaypant24@gmail.com')
+            password_textbox.insert(0 , 'Stillconquering@2290')
             
             username_textbox.bind("<FocusIn>" , lambda e : username_textbox.delete( 0 , 'end'))
             password_textbox.bind("<FocusIn>" , lambda e : password_textbox.delete(0  , "end"))
@@ -90,6 +85,8 @@ def single_threaded_ui():
 
     sleep_label  = ttk.Label(main_application , text="Enter Delay Timer : ")
     sleep_timer  = ttk.Spinbox(main_application  , width=10 , from_=0 , to=10)
+    
+    sleep_timer.set(7)
 
 
 
@@ -105,9 +102,9 @@ def single_threaded_ui():
 
 
 main_thread  = threading.Thread(target=single_threaded_ui)
-
-
 main_thread.start()
+
+main_thread.join()
 
 
 print("threading part done")
