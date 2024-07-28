@@ -25,6 +25,10 @@ pyautogui.keyUp('ctrl')
 class Selenium_scrapper():
     
     
+    def csv_saving(self):
+        print("Data")
+    
+    
     def __init__(self , username  = '' , password = '' , delay = 6  , yearly_selection   = False , autoamted_username  = False) -> None:
         self.delay = delay
         self.username  = username
@@ -78,13 +82,34 @@ class Selenium_scrapper():
                 print('Unable to Login , waiting for Delay to login ')
                 sleep(self.delay * 3)
                 
-                
+            current_number = 2024
             for i in range(15):
                 try:
-                    current_number = 2024
-                    self.chrome_driver.get(f'https://www.amazon.in/your-orders/orders?timeFilter=year-{current_number}&startIndex=0&ref_=ppx_yo2ov_dt_b_pagination_1_1')
+                    self.chrome_driver.get(f'https://www.amazon.in/your-orders/orders?timeFilter=year-{current_number}')
                     current_title = self.chrome_driver.title
-                    print(current_title)
+                    if current_title == 'Your Orders':
+                        try:
+                            for i in range(15):
+                                self.chrome_driver.get(f'https://www.amazon.in/your-orders/orders?timeFilter=year-{current_number}&startIndex={i * 10}')
+                                sleep(self.delay)
+                                print("i have reached here ")
+                                
+                                try:
+                                    current_amount  = self.chrome_driver.find_elements(By.CLASS_NAME , "a-color-secondary value") #a-size-base a-color-secondary   a-size-base a-color-secondary
+                                except Exception as first_error:
+                                    print(first_error)
+                                
+                                try:
+                                    current_amount  = self.chrome_driver.find_elements(By.CLASS_NAME , 'a-size-base a-color-secondary')
+                                except Exception as second_error:
+                                    print(second_error)
+                                
+                                for each in current_amount:
+                                    print("reached and corected ")
+                                    print(each)
+                                    print(each.get_attribute('value'))
+                        except Exception as page_error:
+                            print(f"Pagenation error {page_error}")
                     current_number-=1
                     sleep(self.delay // 2)
                 except Exception as main_error:
