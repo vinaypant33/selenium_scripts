@@ -60,7 +60,6 @@ class Selenium_scrapper():
             current_title = self.chrome_driver.title
             print(current_title)
             if current_title == 'Amazon Sign In':
-                
                 print("Contains")
             else:
                 pass
@@ -76,7 +75,7 @@ class Selenium_scrapper():
                 current_password_selection  = self.chrome_driver.find_element(By.NAME , 'password')
                 current_password_selection.send_keys(self.password)
                 password_button  = self.chrome_driver.find_element(By.ID , 'signInSubmit').click()
-                sleep(self.delay)
+                sleep(self.delay * 2)
             except Exception as login_error:
                 print(login_error)
                 print('Unable to Login , waiting for Delay to login ')

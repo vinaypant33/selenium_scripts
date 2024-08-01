@@ -23,7 +23,7 @@ def ui():
     
     
     
-    page_depth.place(x = 0 , y = 0)
+    page_depth.place(x = 10 , y = 10)
 
     main_window.mainloop()
 
