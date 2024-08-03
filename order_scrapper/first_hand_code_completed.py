@@ -11,8 +11,6 @@ import pyautogui
 
 import csv
 
-from tkinter import messagebox
-
 
 current_scrapper_data = []
 
@@ -67,63 +65,14 @@ class Scrapper():
                                 try:
                                     selector  = self.chrome_driver.find_elements(By.CSS_SELECTOR , "a.a-link-normal.yohtmlc-order-details-link")
                                     for each in selector:
-                                        self.other  = self.chrome_driver.execute_script(f"window.open('{each.get_attribute('href')}', '_blank');")
-                                        sleep(self.delay // 4)
-                                        # sleep(self.delay * 3)
-                                        
-                                        try:
-                                            
-                                            date = self.chrome_driver.find_elements(By.CLASS_NAME , 'order-date-invoice-item')
-                                            for child in date:
-                                                print(child.text)
-                                            # procured_date  = self.chrome_driver.find_element(By.XPATH , '//*[@id="orderDetails"]/div[1]/div[9]/div[1]/div[1]/div/span[1]')
-                                            # payment_method  = self.chrome_driver.find_element(By.XPATH ,'//*[@id="orderDetails"]/div[1]/div[11]/div/div/div/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/ul/li/span')
-                                            # product_name = self.chrome_driver.find_element(By.XPATH , '//*[@id="orderDetails"]/div[1]/div[13]/div/div/div[2]/div/div[1]/div/div/div/div[2]/div[1]/a')
-                                            # price = self.chrome_driver.find_element(By.XPATH , '//*[@id="od-subtotals"]/div[6]/div[2]/span/span/span[2]')
-                                            
-                                            # print(payment_method.text)
-                                            # pass
-                                        
-                                            
-                                            # print(f'Product Name : {product_name.text}, Procured Date : {procured_date.text}, Payment Method : {payment_method.text}, Price : {price.text}')
-                                            
-                                            
-                                        except Exception as link_error:
-                                            print(link_error)
-                                            # messagebox.showerror("" , str(link_error))
-                                        # print("i am gonna length the seelctor")
-                                        # print(len(selector))
-                                        sleep(self.delay // 4)
-                                        self.chrome_driver.switch_to.window(self.chrome_driver.window_handles[1])
-                                        self.chrome_driver.close()
-                                        self.chrome_driver.switch_to.window(self.chrome_driver.window_handles[0])
-                                        
-                                        
-                                        # self.other.close()
                                         # self.csv_saving(each.get_attribute('href'))
-                                        # pass
+                                        pass
                                         # print(each.get_attribute('href'))
                                         # current_scrapper_data.append(each.get_attribute('href'))
                                         
                                         
                                 except Exception as second_class_error:
                                     print(f"Second Class Error {second_class_error}")
-                                    
-                                # yohtmlc-order-level-connections
-                                
-                                # try:
-                                #     selector  = self.chrome_driver.find_elements(By.CSS_SELECTOR , "a-link-normal")
-                                #     for each in selector:
-                                #         if "View order details" in each.text:
-                                #             self.other  = self.chrome_driver.execute_script(f"window.open('{each.get_attribute('href')}', '_blank');")
-                                #             sleep(self.delay // 3)
-                                #             print(len(selector))
-                                #             sleep(self.delay)
-                                #             self.chrome_driver.switch_to.window(self.chrome_driver.window_handles[1])
-                                #             self.chrome_driver.close()
-                                #             self.chrome_driver.switch_to.window(self.chrome_driver.window_handles[0])
-                                # except Exception as second_error:
-                                #     print(second_error)
                                 
                             print("Execution Completed")
                                 

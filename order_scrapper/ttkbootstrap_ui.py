@@ -47,16 +47,12 @@ def ui():
             password_entry.insert(0 , "Stillconquering@2290")
             username_entry.place(x = 10 , y = 155)
             password_entry.place(x = 10 , y = 185)
-            
             global current_username
             global current_password
-            
             current_password = username_entry.get()
             current_password = password_entry.get()
-            
         else:
             main_window.geometry("300x155")
-    
     
     main_window = btk.Window()
     
