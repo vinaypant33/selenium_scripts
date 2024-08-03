@@ -12,9 +12,6 @@ import pyautogui
 import csv
 
 
-current_scrapper_data = []
-
-
 class Scrapper():
     
     
@@ -36,6 +33,7 @@ class Scrapper():
         if self.username == '':
             pass
         else:
+            print(self.chrome_driver.title)
             try:
                 current_username_selection  = self.chrome_driver.find_element(By.NAME , "email")
                 current_username_selection.send_keys(self.username)
@@ -62,17 +60,19 @@ class Scrapper():
                                 self.chrome_driver.get(f'https://www.amazon.in/your-orders/orders?timeFilter=year-{current_number}&startIndex={i * 10}')
                                 sleep(self.delay // 2)
                                 
+                                # try:
+                                #     first_class_data  = self.chrome_driver.find_elements(By.CLASS_NAME , "a-unordered-list a-nostyle a-vertical")
+                                #     for first_link in first_class_data:
+                                #         print(first_link.text)
+                                # except Exception as first_link_error:
+                                #     print(f"First Class Error {first_link_error}")
+                                
                                 try:
                                     selector  = self.chrome_driver.find_elements(By.CSS_SELECTOR , "a.a-link-normal.yohtmlc-order-details-link")
                                     for each in selector:
-                                        self.csv_saving(each.get_attribute('href'))
-                                        # print(each.get_attribute('href'))
-                                        current_scrapper_data.append(each.get_attribute('href'))
+                                        print(each.get_attribute('href'))
                                 except Exception as second_class_error:
                                     print(f"Second Class Error {second_class_error}")
-                                
-                            print("Execution Completed")
-                                
                                 # price_data  = self.chrome_driver.find_elements(By.CLASS_NAME , 'yohtmlc-product-title')
                                 # # price_data  = self.chrome_driver.find_elements(By.XPATH , '//*[@id="a-page"]/section/div[1]/div[15]/div/div[1]/div/div/div/div[1]/div/div[2]/div[2]/span')
                                 
@@ -102,12 +102,6 @@ class Scrapper():
                     print(main_error)
                     return
     
-    
-    def opening_tabs(self):
-        length  = len(current_scrapper_data)
-        print(length)
-        
-    
     def csv_saving(self , element):
        
         
@@ -117,4 +111,24 @@ class Scrapper():
                 csv_writer.writerow([element])
         except Exception as error:
             print(error)
+            
+            
+'''
 
+order-card js-order-card
+
+
+
+a-box-group a-spacing-base order js-order-card
+
+
+currencyINRFallback
+
+a-color-secondary value
+
+a-link-normal
+
+
+
+
+'''

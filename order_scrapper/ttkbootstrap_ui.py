@@ -11,7 +11,7 @@ def ui():
         print(current_username)
         webdriver  = Scrapper(username=current_username , password=current_password)
         # webdriver = Selenium_scrapper()
-        
+        webdriver.opening_tabs()
         
         
     def checking_():
