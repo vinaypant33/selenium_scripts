@@ -20,8 +20,8 @@ class Scrapper():
     
     def __init__(self , username = '' , password = '' , delay = 10) -> None:
         self.delay = delay
-        self.username  = 'vinaypant24@gmail.com'
-        self.password = 'Stillconquering@2290'
+        self.username  = ''
+        self.password = ''
         
         options = webdriver.ChromeOptions()
         options.add_experimental_option('detach' , True)
