@@ -26,7 +26,9 @@ class Scrapper():
         pub.sendMessage('message')
         self.delay = delay
         self.username  = 'vinaypant24@gmail.com'
-        self.password = 'Stillconquering@22900'
+
+        self.user_password_input  = input("Enter Password for Loggin In : ")
+        self.password = self.user_password_input
         
         options = webdriver.ChromeOptions()
         options.add_experimental_option('detach' , True)
@@ -87,27 +89,15 @@ class Scrapper():
                                             self.chrome_driver.close()
                                             self.chrome_driver.switch_to.window(self.chrome_driver.window_handles[0])
                                             continue
-                                            
-                                        # try:
-                                        #     current_amount  = self.chrome_driver.find_element(By.CSS_SELECTOR , ".a-column.a-span5.a-text-right.a-span-last")
-                                        # except Exception as payment_error:
-                                        #     print(payment_error)
                                         
-                                        # try:
-                                        #     item_name = self.chrome_driver.find_element(By.CSS_SELECTOR , ".a-fixed-left-grid-col.yohtmlc-item.a-col-right .a-row a.a-link-normal")
 
-                                            
-                                        
-                                        # except Exception as name_error:
-                                        #     print(name_error)
-                                            
-                                        # # aa = [date.text,payment_method.text,current_amount.text,item_name.text]
-                                        # global aa
-                                        # aa = [f'{date.text},{payment_method.text},{current_amount.text},{item_name.text}']
-                                    
-                                        # self.csv_saving(aa)
-                                        
-                                        aa  = [f'{date.text},{payment_method.text},{current_amount.text},{item_name.text}']
+                                        modified_text  = item_name.text.replace("," , "")
+
+                                        # print(item_name.text)
+                                        # print(modified_text)
+                                        order_date_modified  = date.text.replace("Ordered on " , "")
+
+                                        aa  = [f'{order_date_modified},{payment_method.text},{current_amount.text},{modified_text}']
                                         
                                         # print(f'Procured Date {date.text} , Payment Method : {payment_method.text}, Current Amount : {current_amount.text}, Item_Name : {item_name.text}')
                                         self.csv_saving(aa)
