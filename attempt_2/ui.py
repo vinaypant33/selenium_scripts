@@ -3,6 +3,8 @@ import threading
 
 import scrapper
 
+import pubsub as pub
+
 
 def ui():
     
@@ -40,7 +42,7 @@ def ui():
             username_entry = btk.Entry(main_window  , width=45)
             password_entry = btk.Entry(main_window , show="*" , width=45)
             username_entry.insert( 0 , "vinaypant24@gmail.com")
-            password_entry.insert(0 , "Stillconquering@2290")
+            password_entry.insert(0 , "")
             username_entry.place(x = 10 , y = 155)
             password_entry.place(x = 10 , y = 185)
             global current_username
@@ -98,6 +100,15 @@ def ui():
     stop_button.place(x = 160 , y = 120)
     checking_()
     main_window.mainloop()
+    
+    def closed():
+        print('done and completed')
+        # main_window.destroy()
+    
+    
+    # pub.subscribe(closed , 'message')
+    pub.subscribe(closed , 'message')
+    
 
 
 

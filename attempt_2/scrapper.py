@@ -13,6 +13,7 @@ import csv
 
 from tkinter import messagebox
 
+from pubsub import pub
 
 current_scrapper_data = []
 
@@ -21,9 +22,11 @@ class Scrapper():
     
     
     def __init__(self , username = '' , password = '' , delay = 10) -> None:
+        
+        pub.sendMessage('message')
         self.delay = delay
         self.username  = 'vinaypant24@gmail.com'
-        self.password = 'Stillconquering@2290'
+        self.password = 'Stillconquering@22900'
         
         options = webdriver.ChromeOptions()
         options.add_experimental_option('detach' , True)
@@ -44,7 +47,7 @@ class Scrapper():
                 current_password_selection  = self.chrome_driver.find_element(By.NAME , 'password')
                 current_password_selection.send_keys(self.password)
                 password_button  = self.chrome_driver.find_element(By.ID , 'signInSubmit').click()
-                sleep(self.delay * 2)
+                sleep((self.delay * 2)+5)
                 print(self.chrome_driver.title)
             except Exception as login_error:
                 print(login_error)
@@ -77,29 +80,37 @@ class Scrapper():
                                         try:
                                             date = self.chrome_driver.find_element(By.CLASS_NAME , 'order-date-invoice-item')
                                             payment_method  = self.chrome_driver.find_element(By.XPATH , '//*[@id="orderDetails"]/div[1]/div[11]/div/div/div/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/ul/li/span')
-                                            # print(f"Date {date.text} Payment Method {payment_method.text} ")
+                                            current_amount  = self.chrome_driver.find_element(By.CSS_SELECTOR , ".a-column.a-span5.a-text-right.a-span-last")
+                                            item_name = self.chrome_driver.find_element(By.CSS_SELECTOR , ".a-fixed-left-grid-col.yohtmlc-item.a-col-right .a-row a.a-link-normal")
                                         except Exception as error:
                                             print(error)
+                                            self.chrome_driver.close()
+                                            self.chrome_driver.switch_to.window(self.chrome_driver.window_handles[0])
+                                            continue
                                             
-                                        try:
-                                            current_amount  = self.chrome_driver.find_element(By.CSS_SELECTOR , ".a-column.a-span5.a-text-right.a-span-last")
-                                        except Exception as payment_error:
-                                            print(payment_error)
+                                        # try:
+                                        #     current_amount  = self.chrome_driver.find_element(By.CSS_SELECTOR , ".a-column.a-span5.a-text-right.a-span-last")
+                                        # except Exception as payment_error:
+                                        #     print(payment_error)
                                         
-                                        try:
-                                            item_name = self.chrome_driver.find_element(By.CSS_SELECTOR , ".a-fixed-left-grid-col.yohtmlc-item.a-col-right .a-row a.a-link-normal")
+                                        # try:
+                                        #     item_name = self.chrome_driver.find_element(By.CSS_SELECTOR , ".a-fixed-left-grid-col.yohtmlc-item.a-col-right .a-row a.a-link-normal")
 
                                             
                                         
-                                        except Exception as name_error:
-                                            print(name_error)
+                                        # except Exception as name_error:
+                                        #     print(name_error)
                                             
-                                        # aa = [date.text,payment_method.text,current_amount.text,item_name.text]
-                                        global aa
-                                        aa = [f'{date.text},{payment_method.text},{current_amount.text},{item_name.text}']
+                                        # # aa = [date.text,payment_method.text,current_amount.text,item_name.text]
+                                        # global aa
+                                        # aa = [f'{date.text},{payment_method.text},{current_amount.text},{item_name.text}']
                                     
-                                        self.csv_saving(aa)
+                                        # self.csv_saving(aa)
                                         
+                                        aa  = [f'{date.text},{payment_method.text},{current_amount.text},{item_name.text}']
+                                        
+                                        # print(f'Procured Date {date.text} , Payment Method : {payment_method.text}, Current Amount : {current_amount.text}, Item_Name : {item_name.text}')
+                                        self.csv_saving(aa)
                                         self.chrome_driver.close()
                                         self.chrome_driver.switch_to.window(self.chrome_driver.window_handles[0])
                                     
@@ -112,6 +123,11 @@ class Scrapper():
                     print(main_error)
                     return
     
+        self.chrome_driver.close()
+        print("Scrapping Completed")
+        
+        pub.sendMessage('message')
+        
     
     def opening_tabs(self):
         length  = len(current_scrapper_data)
@@ -123,7 +139,10 @@ class Scrapper():
             with open('scrapped.csv' , mode='a' ,newline='') as file:
                 csv_writer = csv.writer(file)
                 # csv_writer.writerow([element])   # This only for the single item
-                csv_writer.writerow(element)
+                for entry in element:
+                    main_element  = entry.split(',')
+                    csv_writer.writerow(main_element)
+                # csv_writer.writerow(element)
         except Exception as error:
             print(error)
             
