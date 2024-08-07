@@ -6,6 +6,9 @@ from selenium.webdriver.support.ui import Select
 from time import sleep
 from tqdm import tqdm
 
+import requests
+import os
+
 # For Reference: 
 import pyautogui
 
@@ -99,8 +102,25 @@ class Scrapper():
 
                                         aa  = [f'{order_date_modified},{payment_method.text},{current_amount.text},{modified_text}']
                                         
-                                        # print(f'Procured Date {date.text} , Payment Method : {payment_method.text}, Current Amount : {current_amount.text}, Item_Name : {item_name.text}')
+                                        print(f'Procured Date {date.text} , Payment Method : {payment_method.text}, Current Amount : {current_amount.text}, Item_Name : {item_name.text}')
                                         self.csv_saving(aa)
+                                        
+                                        try:
+                                            image_element  = self.chrome_driver.find_element(By.CSS_SELECTOR , 'img.yo-critical-feature')
+                                            image_url  = image_element.get_attribute("srdata-a-hires")
+                                            folder_path = 'downloaded_images'
+                                            response = requests.get(image_url)
+                                            os.makedirs(folder_path, exist_ok=True)
+                                            image_name = os.path.basename(f"{modified_text}.jpg")
+                                            # image_name  = os.path.basename(image_url)
+                                            image_path = os.path.join(folder_path, image_name)
+
+                                            with open(image_path, 'wb') as file:
+                                                file.write(response.content)
+                                        except Exception as another_pass:
+                                            print(another_pass)
+                                            
+                                        
                                         self.chrome_driver.close()
                                         self.chrome_driver.switch_to.window(self.chrome_driver.window_handles[0])
                                     
