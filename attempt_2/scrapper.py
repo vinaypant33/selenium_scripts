@@ -107,7 +107,7 @@ class Scrapper():
                                         
                                         try:
                                             image_element  = self.chrome_driver.find_element(By.CSS_SELECTOR , 'img.yo-critical-feature')
-                                            image_url  = image_element.get_attribute("srdata-a-hires")
+                                            image_url  = image_element.get_attribute("src")
                                             folder_path = 'downloaded_images'
                                             response = requests.get(image_url)
                                             os.makedirs(folder_path, exist_ok=True)
