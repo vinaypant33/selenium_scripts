@@ -19,9 +19,11 @@ from bs4 import BeautifulSoup
 
 
 search_pages  = 1
-current_username  = ""
+current_username  = "vinaypant24@gmail.com"
 current_password = ""
-keywords  = ""
+keywords  = "Hr Ireland"
+initial_serach = 0
+
 
 
 
@@ -39,7 +41,8 @@ link_list  = []
 current_username = str(input("Enter Username  : "))
 current_password = str(input("Enter Password : "))
 keywords  = str(input("Enter Keywords Seperated By Space : "))
-
+search_pages = int(input("Enter Number of Pages to Search : "))
+initial_serach = int(input("Enter Initial Number of Pages to Search  : "))
 print("Starting Bot......")
 
 options  = webdriver.ChromeOptions()
@@ -79,7 +82,7 @@ except Exception as button_error:
 
 sleep(waiting)
 
-for i in tqdm(range(search_pages)):
+for i in tqdm(range(initial_serach , search_pages)):
     driver.get(f"https://www.linkedin.com/search/results/people/?keywords={keywords}&page={i}")
     sleep(microwaiting)
     page_source = driver.page_source
@@ -91,10 +94,9 @@ for i in tqdm(range(search_pages)):
         if href :
             if "www.linkedin.com/in/" in href:
                 link_list.append(href)
-    driver.minimize_window()
+    # driver.minimize_window()
     sleep(microwaiting)
-    print(len(link_list))
-    driver.maximize_window()
+    # driver.maximize_window()
 
 
 
@@ -134,32 +136,25 @@ with open("link_file.txt", "w") as file:
 
 
 def sending_message(name , id):
-    if name:
-        custom_message = "\n".join([
-                                    f"Hi {name},",
-                                    "I am heading to Ireland this January for my MS in Data Analytics and am looking to expand my network. I came across your profile and thought connecting, exploring synergies, and learning from your experience would be great.",
-                                    "Looking forward to connecting!",
-                                    "Best",
-                                    "Vinay"])
-    else:
-        
-        custom_message = "\n".join([
-                                    "Hi ,",
-                                    "I am heading to Ireland this January for my MS in Data Analytics and am looking to expand my network. I came across your profile and thought connecting, exploring synergies, and learning from your experience would be great.",
-                                    "Looking forward to connecting!",
-                                    "Best",
-                                    "Vinay"])
-        
 
-    
-    
+    name_message  = f"Hi {name},"
     
     driver.find_element(By.ID , id).click()
     sleep(microwaiting )
     pyautogui.moveTo(1280 , 525 , 2) #1290 515
     pyautogui.click()
-    pyautogui.write(custom_message)
     sleep(microwaiting)
+    # keyboard.write(custom_message)
+    pyautogui.write(name_message)
+    pyautogui.press("enter")
+    pyautogui.write("I am heading to Ireland this January for my MS in Data Analytics and am looking to expand my network. I came across your profile and thought connecting, exploring synergies, and learning from your experience would be great.")
+    pyautogui.press('enter') 
+    pyautogui.write("Looking forward to connecting!")
+    pyautogui.press('enter')
+    pyautogui.write("Best,")
+    pyautogui.press("enter")
+    pyautogui.write("Vinay")
+    sleep(microwaiting *  2)
     pyautogui.moveTo(1614 , 771, 1)
     pyautogui.click()
 
@@ -174,7 +169,7 @@ for each in link_list:
     sleep(microwaiting *  5)
     try:
         element   = driver.find_element(By.XPATH , '/html/body/div[7]/div[3]/div/div/div[2]/div/div/main/section[1]/div[2]/div[3]/div/button')
-        # print(element.get_attribute('id'))
+        print(element.get_attribute('id'))
         try:
             name_element = driver.find_element(By.XPATH , '/html/body/div[7]/div[3]/div/div/div[2]/div/div/main/section[1]/div[2]/div[2]/div[1]/div[1]/span[1]/a/h1')
             sending_message(name_element.get_attribute('innerText') , element.get_attribute('id'))
@@ -183,26 +178,39 @@ for each in link_list:
     except Exception as error:
         print(f"First Error Trying Second Approach")
         try:
-            driver.find_element(By.XPATH , '/html/body/div[7]/div[3]/div/div/div[2]/div/div/main/section[1]/div[2]/div[3]/div/button/span')
+            element  = driver.find_element(By.XPATH , '/html/body/div[7]/div[3]/div/div/div[2]/div/div/main/section[1]/div[2]/div[3]/div/button/span')
             print(element.get_attribute('id'))
             try:
                 name_element = driver.find_element(By.XPATH , '/html/body/div[7]/div[3]/div/div/div[2]/div/div/main/section[1]/div[2]/div[2]/div[1]/div[1]/span[1]/a/h1')
-                ending_message(name_element.get_attribute('innerText') , element.get_attribute('id'))
+                sending_message(name_element.get_attribute('innerText') , element.get_attribute('id'))
             except Exception as name_error:
                 print('Unable to get the name : ')
+                sending_message("" , element.get_attribute("id"))
         except Exception as error:
             print(f"Second Error Trying Third Approach")
             try:
-                driver.find_element(By.XPATH , '/html/body/div[7]/div[3]/div/div/div[2]/div/div/main/section[1]/div[2]/div[3]/div/div[2]/div/div/ul/li[3]/div/span')
+                element  = driver.find_element(By.XPATH , '/html/body/div[7]/div[3]/div/div/div[2]/div/div/main/section[1]/div[2]/div[3]/div/div[2]/div/div/ul/li[3]/div/span')
                 print(element.get_attribute('id'))
                 try:
                     name_element = driver.find_element(By.XPATH , '/html/body/div[7]/div[3]/div/div/div[2]/div/div/main/section[1]/div[2]/div[2]/div[1]/div[1]/span[1]/a/h1')
                     sending_message(name_element.get_attribute('innerText') , element.get_attribute('id'))
                 except Exception as name_error:
                     print('Unable to get the name : ')
+                    sending_message("" , element.get_attribute("id"))
             except Exception as error:
-                print(f"Third Approach Failed : Saving URl for Further Analysis")
-                with open("checking_urls.txt", "a") as file:
+                print(f"Third Approach Failed : Trying Fourth Approach")
+                try:
+                    element  =driver.find_element(By.XPATH , '/html/body/div[6]/div[3]/div/div/div[2]/div/div/main/section[1]/div[2]/div[3]/div/button')
+                    print(element.get_attribute("id"))
+                    try:
+                        name_element = driver.find_element(By.XPATH  , '/html/body/div[7]/div[3]/div/div/div[2]/div/div/main/section[1]/div[2]/div[2]/div[1]/div[1]/span[1]/a/h1')
+                        sending_message(name_element.get_attribute('innerText') , element.get_attribute('id'))
+                    except Exception as name_error:
+                        print("Unable to get the name")
+                        sending_message("" , element.get_attribute("id"))
+                except Exception as error:
+                    print("Fourth Approach fialed saving URl for analysis")
+                    with open("checking_urls.txt", "a") as file:
                         file.write(each + "\n")
 
 
